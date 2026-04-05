@@ -2,6 +2,8 @@
 
 DIRECTORIO=$1
 BUCKET=$2
+FECHA=$(date +"%Y-%m-%d_%H-%M-%S")
+ARCHIVO="backup_$FECHA.tar.gz"
 
 if [ -z "$DIRECTORIO" ] || [ -z "$BUCKET" ]; then
   echo "Uso: bash backup_s3.sh <directorio> <bucket>"
@@ -13,4 +15,6 @@ if [ ! -d "$DIRECTORIO" ]; then
   exit 1
 fi
 
-echo "Validación correcta"
+tar -czf "$ARCHIVO" "$DIRECTORIO"
+
+echo "Compresión completada: $ARCHIVO"
