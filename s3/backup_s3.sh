@@ -16,5 +16,6 @@ if [ ! -d "$DIRECTORIO" ]; then
 fi
 
 tar -czf "$ARCHIVO" "$DIRECTORIO"
+aws s3 cp "$ARCHIVO" "s3://$BUCKET/"
 
-echo "Compresión completada: $ARCHIVO"
+echo "Archivo subido correctamente"
