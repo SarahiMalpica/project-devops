@@ -34,24 +34,22 @@ def main():
 
     if accion == "listar":
         listar_instancias()
-    elif accion == "iniciar":
+    elif accion in ["iniciar", "detener", "terminar"]:
         if len(sys.argv) < 3:
             print("Debes proporcionar un instance_id")
             sys.exit(1)
-        iniciar_instancia(sys.argv[2])
-    elif accion == "detener":
-        if len(sys.argv) < 3:
-            print("Debes proporcionar un instance_id")
-            sys.exit(1)
-        detener_instancia(sys.argv[2])
-    elif accion == "terminar":
-        if len(sys.argv) < 3:
-            print("Debes proporcionar un instance_id")
-            sys.exit(1)
-        terminar_instancia(sys.argv[2])
+
+        instance_id = sys.argv[2]
+
+        if accion == "iniciar":
+            iniciar_instancia(instance_id)
+        elif accion == "detener":
+            detener_instancia(instance_id)
+        elif accion == "terminar":
+            terminar_instancia(instance_id)
     else:
-        print("Acción aún no implementada")
+        print("Acción no válida. Usa: listar, iniciar, detener o terminar")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
-
