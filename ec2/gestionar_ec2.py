@@ -2,6 +2,7 @@
 
 import sys
 import boto3
+from botocore.exceptions import ClientError
 
 def listar_instancias():
     ec2 = boto3.client('ec2')
@@ -32,23 +33,31 @@ def main():
 
     accion = sys.argv[1]
 
-    if accion == "listar":
-        listar_instancias()
-    elif accion in ["iniciar", "detener", "terminar"]:
-        if len(sys.argv) < 3:
-            print("Debes proporcionar un instance_id")
+    try:
+        if accion == "listar":
+            listar_instancias()
+        elif accion in ["iniciar", "detener", "terminar"]:
+            if len(sys.argv) < 3:
+                print("Debes proporcionar un instance_id")
+                sys.exit(1)
+
+            instance_id = sys.argv[2]
+
+            if accion == "iniciar":
+                iniciar_instancia(instance_id)
+            elif accion == "detener":
+                detener_instancia(instance_id)
+            elif accion == "terminar":
+                terminar_instancia(instance_id)
+        else:
+            print("Acción no válida. Usa: listar, iniciar, detener o terminar")
             sys.exit(1)
 
-        instance_id = sys.argv[2]
-
-        if accion == "iniciar":
-            iniciar_instancia(instance_id)
-        elif accion == "detener":
-            detener_instancia(instance_id)
-        elif accion == "terminar":
-            terminar_instancia(instance_id)
-    else:
-        print("Acción no válida. Usa: listar, iniciar, detener o terminar")
+    except ClientError as e:
+        print(f"Error de AWS: {e}")
+        sys.exit(1)
+    except Exception as e:
+        print(f"Error general: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":
